@@ -1,0 +1,35 @@
+# inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'config/**/*'
+    - 'deps/**/*'
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'lib/erlport/**/*'
+    - 'Guardfile'
+    - 'Rakefile'
+    - 'Gemfile'
+    - 'canson.gemspec'
+    - '*.ex'
+    - '*.exs'
+
+Metrics/CyclomaticComplexity:
+  Max: 9
+
+Metrics/PerceivedComplexity:
+  Max: 9
+
+Metrics/ClassLength:
+  Max: 250
+
+# If you are using the --enable-frozen-string-literal flag
+# You might also want to add this:
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Style/SafeNavigation:
+  # Safe navigation may cause a statement to start returning `nil` in addition
+  # to whatever it used to return.
+  ConvertCodeThatCanStartToReturnNil: true

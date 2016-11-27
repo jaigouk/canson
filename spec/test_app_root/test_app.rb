@@ -1,7 +1,6 @@
 require 'canson'
-require 'byebug'
-class TestApp < Canson::Base
 
+class TestApp < Canson::Base
   def self.print_out
     puts 'hijack'
   end

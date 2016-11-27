@@ -8,12 +8,12 @@ class TestApp < Canson::Base
 
   on_open do
     puts '================================'
-    puts 'We have a websocket connection'
+    puts "We have #{params[:count]} connection(s)"
     puts '================================'
   end
 
-  on_close do
-    puts "Bye Bye... #{count} connections left..."
+  on_close do |params|
+    puts "Bye Bye... #{params[:count]} connections left..."
   end
 
   on_shutdown do

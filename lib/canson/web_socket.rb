@@ -25,11 +25,11 @@ module Canson
     end
 
     def on_open
-      @on_open.class.instance_exec(&(@on_open.call))
+      @on_open.class.instance_exec({count: self.count}, &(@on_open.call))
     end
 
     def on_close
-      @on_close.class.instance_exec(&(@on_close.call))
+      @on_close.class.instance_exec({count: self.count}, &(@on_close.call))
     end
 
     def on_shutdown

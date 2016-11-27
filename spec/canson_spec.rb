@@ -7,7 +7,7 @@ describe "TestApp" do
     TestApp.new
   end
 
-   describe 'get /' do
+  describe 'get /' do
     it 'returns result and header' do
       get '/'
       res = JSON.parse(last_response.body)
@@ -18,9 +18,26 @@ describe "TestApp" do
     end
   end
 
+  describe 'get /no_path' do
+    it 'returns 404' do
+      get '/no_path'
+      last_response.status.must_equal 404
+      last_response.body.must_match 'no route'
+    end
+  end
+
   describe 'get /ask' do
     it 'accepts params' do
-      get '/ask', {ask: 'jedi'}.to_json
+      get '/ask', {name: 'jedi'}.to_json
+      res = JSON.parse(last_response.body)
+      last_response.ok?.must_equal true
+      res['results'].must_equal 'jedi'
+      header = last_response.header
+      header['Content-Type'].must_equal 'application/json'
+    end
+
+    it 'accepts params' do
+      get '/ask?name=jedi'
       res = JSON.parse(last_response.body)
       last_response.ok?.must_equal true
       res['results'].must_equal 'jedi'
@@ -70,9 +87,8 @@ describe "TestApp" do
 
     it 'returns nothing if there is no matching param' do
       post '/bla', {foo: ''}.to_json
-      last_response.ok?.must_equal true
-      res = JSON.parse(last_response.body)
-      res['name'].must_equal nil
+      last_response.status.must_equal 404
+      last_response.body.must_equal 'not found'
     end
   end
 end

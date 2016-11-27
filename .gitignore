@@ -9,3 +9,4 @@
 /tmp/
 /.gitignore
 /.byebug_history
+/spec/test_app_root/.byebug_history

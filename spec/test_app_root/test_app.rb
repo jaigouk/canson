@@ -7,8 +7,8 @@ class TestApp < Canson::Base
   end
 
   get '/ask' do |params|
-    ask = params[:ask]
-    {results: ask}
+    name = params[:name]
+    {results: name}
   end
 
   get '/index' do

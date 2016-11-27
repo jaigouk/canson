@@ -48,31 +48,45 @@ module Canson
     def call(env)
       m = env['REQUEST_METHOD'].tr('/', '').downcase.to_sym
       target = routes[m][env['PATH_INFO']]
-      return call_result(env, target) if target
-      [404, {}, ['not found']]
+      return  [404, {}, ['no route']] unless target
+      return call_result(env, target)
+    rescue => e
+      [500, {}, ["server error #{e.message}".to_json]]
     end
 
     private
 
-    def get_req(env)
-      Rack::Request.new(env)
-    end
-
     def call_result(env, target)
-      param = parse_body(get_req(env))
+      param = get_param(env)
       result = if param.nil?
-                 target.call.call.to_json
+                 target.call.call
                else
-                 target.call.call(param).to_json
+                 target.call.call(param)
                end
-      [200, { 'Content-Type' => 'application/json' }, [result]]
+      return [404, {}, ['not found']] if result.values.include? nil
+      [200, { 'Content-Type' => 'application/json' }, [result.to_json]]
     end
 
-    def parse_body(req)
-      param = req.params.map { |k, _v| k }.first
-      return unless param
-      JSON.parse(param)
-          .map { |k, v| [k.to_sym, v] }.to_h
+    def get_param(env)
+      req = Rack::Request.new(env)
+      param = req.params.empty? ? req.body.read : req.params
+      return if param.empty?
+      param_to_hash(param)
+    end
+
+    def param_to_hash(param)
+      if param.class == Hash
+        if param.keys.first.include?(':')
+          return to_hash(JSON.parse(param.keys.first))
+        end
+        to_hash(param)
+      else
+        to_hash(JSON.parse(param))
+      end
+    end
+
+    def to_hash(ele)
+      ele.map { |k, v| [k.to_sym, v] }.to_h
     end
   end
 end

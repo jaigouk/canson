@@ -6,6 +6,33 @@ class TestApp < Canson::Base
     puts 'hijack'
   end
 
+  on_open do
+    puts '================================'
+    puts 'We have a websocket connection'
+    puts '================================'
+  end
+
+  on_close do
+    puts "Bye Bye... #{count} connections left..."
+  end
+
+  on_shutdown do
+    write 'The server is shutting down, goodbye.'
+  end
+
+  on_message do |params|
+    data = params[:data]
+    ws = params[:ws]
+    nickname = params[:nickname]
+    tmp = "#{nickname}: #{data}"
+    ws.write tmp
+    ws.each { |h| h.write tmp }
+    puts '================================'
+    puts "got message: #{data} encoded as #{data.encoding}"
+    puts "broadcasting #{tmp.bytesize} bytes with encoding #{tmp.encoding}"
+    puts '================================'
+  end
+
   get '/' do
     print_out
     {results: 'hi'}

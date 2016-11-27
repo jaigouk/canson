@@ -18,12 +18,13 @@ module Canson
     attr_reader :klass
     attr_accessor :responder
 
-    def_delegators :@klass, :routes, :method_missing
+    def_delegators :@klass, :routes, :method_missing, :filename
 
     class << self
-      def inherited(subclass)
-        subclass.routes @routes
-      end
+      # def inherited(subclass)
+      #   # subclass.routes @routes
+      #   subclass.filename @filename
+      # end
 
       [:on_open, :on_close, :on_shutdown, :on_message].each do |m|
         define_method m do |&block|
@@ -52,15 +53,21 @@ module Canson
       @responder = responder
       @klass = self.class
       @websocket = nil
+      @filename = File.expand_path('./index.html')
+    end
+
+    def filename
+      @filename
     end
 
     def call(env)
       m = env['REQUEST_METHOD'].tr('/', '').downcase.to_sym
       target = routes[m][env['PATH_INFO']]
 
-      if m == :get && env['PATH_INFO'] == '/' && env['HTTP_UPGRADE'] != 'websocket'
-        out = File.open File.expand_path('./index.html')
-        return [200, { 'X-Sendfile' => File.expand_path('./index.html'), 'Content-Length' => out.size }, out]
+      if m == :get && env['PATH_INFO'] == '/' && File.file?(filename)
+        out = File.open(filename)
+        return [200, { 'X-Sendfile' => filename,
+          'Content-Length' => out.size }, out]
       end
 
       return handle_socket(env) if env['HTTP_UPGRADE'] == 'websocket'
@@ -72,23 +79,7 @@ module Canson
     end
 
     def handle_socket(env)
-# require 'byebug'
-# byebug
       nickname = env['PATH_INFO'][1..-1].force_encoding 'UTF-8'
-      # env['upgrade.websocket'.freeze] = 'websocket'
-      # on_message = routes[:on_message]
-      # proc = Proc.new{|env| puts env}
-      # proc.call(env)
-      # routes[:on_message][nickname] = Responder.new(:ws, proc)
-
-      # self.class.instance_exec(env, &(routes[:on_message][nickname].call))
-      # if env.class == String
-        # self.class.instance_exec(env, &(on_message.call))
-      # else
-      #   nickname = env['PATH_INFO'][1..-1].force_encoding 'UTF-8'
-      #   env['upgrade.websocket'.freeze] = routes[:ws][:on_message][nickname]
-      # end
-
       if env['HTTP_UPGRADE'.freeze] =~ /websocket/i
         routes[:on_message][nickname] ||= Canson::Websocket.new(env)
         routes[:on_message][nickname].on_open = routes[:on_open]['websocket_method']

@@ -1,5 +1,15 @@
 sudo: false
 language: ruby
+cache: bundler
 rvm:
   - 2.3.1
+bundler_args: --jobs=2
+cache: bundler
 before_install: gem install bundler -v 1.13.6
+
+script:
+  - bundle install
+  - rake
+  - gem install bundler-audit
+  - bundle-audit update
+  - bundle-audit check

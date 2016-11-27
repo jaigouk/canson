@@ -1,8 +1,8 @@
 require 'canson'
 require 'byebug'
 class TestApp < Canson::Base
-
   get '/' do
+    puts 'hijack'
     {results: 'hi'}
   end
 

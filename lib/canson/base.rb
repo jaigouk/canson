@@ -59,9 +59,9 @@ module Canson
     def call_result(env, target)
       param = get_param(env)
       result = if param.nil?
-                 target.call.call
+                 self.class.instance_exec(&(target.call))
                else
-                 target.call.call(param)
+                 self.class.instance_exec(param, &(target.call))
                end
       return [404, {}, ['not found']] if result.values.include? nil
       [200, { 'Content-Type' => 'application/json' }, [result.to_json]]

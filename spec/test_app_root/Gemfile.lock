@@ -9,6 +9,7 @@ PATH
       grpc (~> 1.0.1)
       http-2 (~> 0.8.2)
       http_parser.rb (~> 0.6)
+      iodine (~> 0.2.3)
       mime-types (~> 2.4)
       mustermann (~> 0.4)
       rack (~> 2.0.1)
@@ -52,6 +53,9 @@ GEM
       googleauth (~> 0.5.1)
     http-2 (0.8.2)
     http_parser.rb (0.6.0)
+    iodine (0.2.3)
+      rack
+      rake-compiler
     jwt (1.5.6)
     little-plugger (1.1.4)
     logging (2.1.0)
@@ -66,6 +70,9 @@ GEM
     os (0.9.6)
     public_suffix (2.0.4)
     rack (2.0.1)
+    rake (11.3.0)
+    rake-compiler (1.0.2)
+      rake
     signet (0.7.3)
       addressable (~> 2.3)
       faraday (~> 0.9)

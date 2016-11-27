@@ -1,8 +1,13 @@
 require 'canson'
 require 'byebug'
 class TestApp < Canson::Base
-  get '/' do
+
+  def self.print_out
     puts 'hijack'
+  end
+
+  get '/' do
+    print_out
     {results: 'hi'}
   end
 

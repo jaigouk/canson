@@ -1,5 +1,73 @@
 # Canson
 
+small rack based framework that can run websocket. 20K connections can be handled
+
+## Run the example chat app
+
+```
+cd spec/test_app_root
+bundle install
+bundler exec iodine -p 3000 -t 16 -w 4
+```
+
+open localhost:3000 in browser
+
+## Example app
+
+in `spec/test_app_root`
+
+```
+require 'canson'
+class TestApp < Canson::Base
+
+  def self.print_out
+    puts 'hijack'
+  end
+
+  get '/' do
+    print_out
+    {results: 'hi'}
+  end
+
+  get '/ask' do |params|
+    name = params[:name]
+    {results: name}
+  end
+
+   on_open do
+    puts '================================'
+    puts 'We have a websocket connection'
+    puts '================================'
+  end
+
+  on_close do
+    puts "Bye Bye... #{count} connections left..."
+  end
+
+  on_shutdown do
+    write 'The server is shutting down, goodbye.'
+  end
+
+  on_message do |params|
+    data = params[:data]
+    ws = params[:ws]
+    nickname = params[:nickname]
+    tmp = "#{nickname}: #{data}"
+    ws.write tmp
+    ws.each { |h| h.write tmp }
+    puts '================================'
+    puts "got message: #{data} encoded as #{data.encoding}"
+    puts "broadcasting #{tmp.bytesize} bytes with encoding #{tmp.encoding}"
+    puts '================================'
+  end
+end
+```
+
+```
+require './test_app.rb'
+run TestApp.new
+```
+
 
 ## Usage
 

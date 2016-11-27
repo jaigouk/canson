@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+require 'iodine'
+require 'rack'
+
+if ARGV[0] =~ /(\-\?)|(help)|(\?)$/
+  puts <<-EOS
+Iodine's HTTP/Websocket server version #{Iodine::VERSION}
+Use:
+    iodine <options> <filename>
+Both <options> and <filename> are optional.
+Available options:
+ -p          Port number. Default: 3000.
+ -t          Number of threads. Default: 1 => single worker thread.
+ -w          Number of worker processes. Default: 1 => a single process.
+ -www        Public folder for static file serving. Default: nil (none).
+ -v          Log responses.
+ -q          Never log responses.
+ -warmup     Warmup invokes autoloading (lazy loading) during server startup.
+ -maxbd      Maximum Mb per HTTP message (max body size). Default: ~50Mb.
+ -maxms      Maximum Bytes per Websocket message. Default: ~250Kb.
+ -ping       Websocket ping interval in seconds. Default: 40 seconds.
+ <filename>  Defaults to: config.ru
+Example:
+    iodine -p 80
+    iodine -p 8080 path/to/app/conf.ru
+    iodine -p 8080 -w 4 -t 16
+EOS
+  exit(0)
+end
+
+filename = (ARGV[-2].to_s[0] != '-' && ARGV[-1].to_s[0] != '-' && ARGV[-1]) || 'config.ru'
+app, opt = Rack::Builder.parse_file filename
+if ARGV.index('-maxbd') && ARGV[ARGV.index('-maxbd') + 1]
+  Iodine::Rack.max_body_size = ARGV[ARGV.index('-maxbd') + 1].to_i
+end
+if ARGV.index('-maxms') && ARGV[ARGV.index('-maxms') + 1]
+  Iodine::Rack.max_msg_size = ARGV[ARGV.index('-maxms') + 1].to_i
+end
+if ARGV.index('-ping') && ARGV[ARGV.index('-ping') + 1]
+  Iodine::Rack.ws_timeout = ARGV[ARGV.index('-ping') + 1].to_i
+end
+if ARGV.index('-www') && ARGV[ARGV.index('-www') + 1]
+  Iodine::Rack.public = ARGV[ARGV.index('-www') + 1]
+end
+Iodine::Rack.log = true if ARGV.index('-v')
+Iodine::Rack.log = false if ARGV.index('-q')
+Iodine.warmup if ARGV.index('-warmup')
+Iodine::Rack.run(app, opt)

@@ -26,8 +26,8 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir        = "bin"
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'dry-monads', '~> 0.2.1'
@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'http-2', '~> 0.8.2'
   spec.add_dependency 'http_parser.rb', '~> 0.6'
   spec.add_dependency 'dotenv'
+  spec.add_runtime_dependency 'iodine', '~> 0.2.3'
   spec.add_runtime_dependency 'rack', '~> 2.0.1'
   spec.add_runtime_dependency 'tilt', '~> 2.0.5'
   spec.add_runtime_dependency 'mustermann', '~> 0.4'

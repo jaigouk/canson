@@ -3,7 +3,7 @@
 module Canson
   # responsible to return the block
   class Responder
-    attr_reader :method
+    attr_reader :method, :response_handler
     attr_writer :base
 
     def initialize(method = nil, &block)

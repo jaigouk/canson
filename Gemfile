@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
+gem 'grpc', '~> 1.0.1'
+gem 'grpc-tools', '~> 1.0.1'
 
 gemspec
+
 group :development, :test do
   gem 'bundler', '~> 1.7'
   gem 'rake', '~> 11.3.0'

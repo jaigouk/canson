@@ -1,7 +1,14 @@
 module Canson
+  ##
+  # methods are used in actual app
+  # json will be the default format
+  #
+  # get '/' do
+  #  {result: '34'}
+  # end
+  #
   module DSL
     def inherited(subclass)
-      generate_proto_based_files
       subclass.app_file = caller_locations.map(&:absolute_path).find do |f|
         !f.start_with?(File.dirname(__FILE__) + File::SEPARATOR)
       end
@@ -61,9 +68,8 @@ module Canson
     private
 
     def generate_proto_based_files
-      puts '~~~~~~~~~~~~'
-      puts 'inherited'
-      puts '~~~~~~~~~~~~'
+      # /Users/jaigouk/Projects/interviews/blacklane/canson/lib/canson/*.proto
+      # puts File.join(__dir__, '*.proto')
     end
   end
 end

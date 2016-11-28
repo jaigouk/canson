@@ -22,7 +22,7 @@ grpc_tools_ruby_protoc -I ../protos --ruby_out=lib --grpc_out=lib ../protos/hell
 #-> generates helloworld_pb.rb and helloworld_services_pb.rb
 ```
 
--[ ] run the command
+-[X] run the command
 
 step3)
 update server / client rb files

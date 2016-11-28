@@ -99,7 +99,7 @@ Given the following piece of ruby code:
 ```ruby
 # config.ru
 
-require "trialday"
+require "canson"
 
 get "/bla" do
   { results: [1, 2, 3] }

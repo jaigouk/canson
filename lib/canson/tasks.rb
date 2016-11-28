@@ -6,8 +6,10 @@ desc "Generate service files from Protocol Buffers"
 namespace :grpc do
   task :generate_ruby_files do
     Dir.glob("#{root}/proto/*.proto") do |prt|
+      sub_dir = prt.split('/').last.gsub('.proto','')
+      mkdir_p "#{root}/services/#{sub_dir}"
       sh("#{bin_file}", "-I", "#{root}/proto",
-          "--ruby_out=#{root}/services", "--grpc_out=#{root}/services", prt)
+          "--ruby_out=#{root}/services/#{sub_dir}", "--grpc_out=#{root}/services/#{sub_dir}", prt)
     end
   end
 end

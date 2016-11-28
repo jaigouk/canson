@@ -7,6 +7,7 @@ small rack based framework that can run websocket. 20K connections can be handle
 ```
 cd spec/test_app_root
 bundle install
+bundle exec rake grpc:generate_ruby_files
 bundler exec iodine -p 3000 -t 16 -w 4
 ```
 

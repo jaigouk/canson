@@ -26,7 +26,7 @@ module Canson
       end
     end
 
-    [:get, :post, :put, :delete, :options].each do |m|
+    [:get, :post, :put, :delete, :options, :grpc].each do |m|
       define_method m do |path, opts = {}, &block|
         path = ::Mustermann.new path, opts
         @responder = Responder.new m, &block

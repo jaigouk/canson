@@ -37,6 +37,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'http-2', '~> 0.8.2'
   spec.add_dependency 'http_parser.rb', '~> 0.6'
   spec.add_dependency 'dotenv'
+  # spec.add_runtime_dependency 'grpc', '~> 1.0.1'
+  spec.add_runtime_dependency 'grpc-tools', '~> 1.0.1'
   spec.add_runtime_dependency 'iodine', '~> 0.2.3'
   spec.add_runtime_dependency 'rack', '~> 2.0.1'
   spec.add_runtime_dependency 'tilt', '~> 2.0.5'

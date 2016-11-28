@@ -6,9 +6,7 @@ class TestApp < Canson::Base
   end
 
   on_open do
-    puts '================================'
-    puts "We have #{params[:count]} connection(s)"
-    puts '================================'
+    puts "Connected"
   end
 
   on_close do |params|

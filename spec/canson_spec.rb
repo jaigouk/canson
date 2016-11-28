@@ -8,13 +8,12 @@ describe "TestApp" do
   end
 
   describe 'get /' do
-    it 'returns result and header' do
+    it 'returns html if there is a matching default file' do
       get '/'
-      res = JSON.parse(last_response.body)
-      last_response.ok?.must_equal true
-      res['results'].must_equal 'hi'
+      expected = last_response.body.include? '</html>'
+      expected.must_equal true
       header = last_response.header
-      header['Content-Type'].must_equal 'application/json'
+      header['Content-Type'].must_equal 'text/html'
     end
   end
 

@@ -13,8 +13,8 @@ service Greeter {
 }
 ```
 
-* need to set proto folder
-* need to set input / output folder
+-[X] need to set proto folder
+-[X] need to set input / output folder
 
 step2) From the examples/ruby/ directory:
 ```
@@ -22,7 +22,7 @@ grpc_tools_ruby_protoc -I ../protos --ruby_out=lib --grpc_out=lib ../protos/hell
 #-> generates helloworld_pb.rb and helloworld_services_pb.rb
 ```
 
-* run the command
+-[ ] run the command
 
 step3)
 update server / client rb files

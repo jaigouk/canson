@@ -9,7 +9,7 @@ group :development, :test do
   gem 'guard', '~> 2.14.0'
   gem 'guard-bundler', '~> 2.1.0'
   gem 'guard-minitest', '~> 2.4.6'
-  gem 'rubocop', '~> 0.45.0'
+  gem 'rubocop'
   gem 'guard-rubocop', '~> 1.2.0'
   gem 'minitest-reporters', '~> 1.1.11'
   gem 'minitest-vcr', '~> 1.4.0'
